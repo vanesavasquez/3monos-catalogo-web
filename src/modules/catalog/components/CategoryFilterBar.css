@@ -1,0 +1,56 @@
+.filter-bar {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.55rem, 1.4vw, 1rem);
+  width: 100%;
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.filter-bar__btn {
+  width: 100%;
+  padding: 0.9rem 1rem;
+  border-radius: var(--radius-pill);
+  border: 1.5px solid var(--border-strong);
+  background-color: var(--surface-card);
+  color: var(--ink-primary);
+  font-size: 0.96rem;
+  font-weight: 600;
+  text-align: center;
+  transition:
+    background-color 200ms ease,
+    border-color 200ms ease,
+    color 200ms ease,
+    transform 160ms ease;
+}
+
+.filter-bar__btn:hover {
+  border-color: var(--brand-crimson);
+  color: var(--brand-crimson);
+}
+
+.filter-bar__btn--active {
+  background-color: var(--brand-crimson);
+  border-color: var(--brand-crimson);
+  color: var(--ink-inverse);
+}
+
+.filter-bar__btn--active:hover {
+  background-color: var(--brand-crimson-hover);
+  color: var(--ink-inverse);
+}
+
+@media (max-width: 780px) {
+  .filter-bar {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .filter-bar__btn:first-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-bar {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

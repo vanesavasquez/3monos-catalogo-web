@@ -1,0 +1,42 @@
+:root {
+  /* Colores oficiales del Manual de Marca 3 Monos */
+  --brand-yellow: #f6b50e;
+  --brand-crimson: #d82731;
+  --brand-crimson-hover: #b81d26;
+  --brand-cobalt: #0a38a6;
+  --brand-burgundy: #78002d;
+
+  /* Paleta pastel oficial de estudio */
+  --pastel-yellow: #fdf0cf;
+  --pastel-coral: #f7d4d6;
+  --pastel-cobalt: #ced7ed;
+  --pastel-mauve: #e4ccd5;
+
+  /* Superficies y tintas */
+  --surface-page: #fffdf9;
+  --surface-canvas: #faf4ec;
+  --surface-card: #ffffff;
+  --surface-muted: #f2ece4;
+  --ink-primary: #1a1715;
+  --ink-secondary: #4e4742;
+  --ink-on-yellow: #433a28;
+  --ink-inverse: #ffffff;
+
+  /* Bordes y elevación */
+  --border-subtle: rgba(26, 23, 21, 0.08);
+  --border-strong: rgba(26, 23, 21, 0.16);
+  --shadow-card: 0 8px 24px -10px rgba(26, 23, 21, 0.12);
+  --shadow-sticky: 0 12px 30px -12px rgba(216, 39, 49, 0.38);
+  --shadow-drawer: -12px 0 36px -8px rgba(26, 23, 21, 0.2);
+
+  /* Tipografía oficial */
+  --font-display: 'Lilita One', system-ui, sans-serif;
+  --font-body: 'Roboto Slab', Georgia, serif;
+
+  /* Escala de radios y espaciados */
+  --radius-hero: 28px;
+  --radius-card: 20px;
+  --radius-pill: 999px;
+  --container-max: 1240px;
+  --section-gap: clamp(3.5rem, 6vw, 5.5rem);
+}

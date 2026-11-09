@@ -1,0 +1,55 @@
+.how-to-buy {
+  margin-top: clamp(5rem, 9vw, 8rem);
+  scroll-margin-top: 96px;
+}
+
+.how-to-buy__heading {
+  font-size: clamp(1.9rem, 3.2vw, 2.55rem);
+  color: var(--ink-primary);
+  margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.how-to-buy__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.15rem, 2.4vw, 1.75rem);
+}
+
+.how-to-buy__card {
+  border-radius: var(--radius-card);
+  padding: clamp(1.75rem, 3vw, 2.35rem);
+  display: flex;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.how-to-buy__icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background-color: rgba(255, 255, 255, 0.72);
+  color: var(--ink-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.35rem;
+}
+
+.how-to-buy__title {
+  font-size: 1.42rem;
+  line-height: 1.15;
+  color: var(--ink-primary);
+}
+
+.how-to-buy__desc {
+  font-size: 0.96rem;
+  line-height: 1.5;
+  color: #2c2623;
+  max-width: 32ch;
+}
+
+@media (max-width: 860px) {
+  .how-to-buy__grid {
+    grid-template-columns: 1fr;
+  }
+}

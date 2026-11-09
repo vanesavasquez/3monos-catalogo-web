@@ -1,0 +1,45 @@
+/* Fondo amarillo #FBE28A con texto gris #3F4248 -> Contraste 6.9:1 (Pasa WCAG AA >= 4.5:1) */
+.upcoming-placeholder {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1 / 1;
+  background-color: #fbe28a;
+  color: #3f4248;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 1.25rem;
+  gap: 0.45rem;
+  user-select: none;
+}
+
+.upcoming-placeholder__cube {
+  width: 44px;
+  height: 44px;
+  color: #3f4248;
+  margin-bottom: 0.15rem;
+}
+
+.upcoming-placeholder__label {
+  font-size: 1.25rem;
+  line-height: 1.1;
+  color: #3f4248;
+}
+
+.upcoming-placeholder__sublabel {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #4b4f56;
+}
+
+.upcoming-placeholder--compact {
+  padding: 0.5rem;
+}
+
+.upcoming-placeholder--compact .upcoming-placeholder__cube {
+  width: 26px;
+  height: 26px;
+  margin-bottom: 0;
+}

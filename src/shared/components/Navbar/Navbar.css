@@ -1,0 +1,225 @@
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background-color: var(--surface-page);
+  border-bottom: 1px solid var(--border-subtle);
+  transition:
+    background-color 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 260ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 260ms ease;
+}
+
+.navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-height: 92px;
+  transition: min-height 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.navbar__brand {
+  display: inline-flex;
+  align-items: center;
+  padding-block: 14px;
+  padding-right: 20px;
+  flex-shrink: 0;
+}
+
+.navbar__logo {
+  height: 42px;
+  width: auto;
+  object-fit: contain;
+  transition: height 260ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.navbar__nav {
+  display: flex;
+  align-items: center;
+  gap: 2.25rem;
+}
+
+.navbar__link {
+  position: relative;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--ink-primary);
+  padding-block: 0.35rem;
+  transition: color 200ms ease;
+}
+
+.navbar__link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--brand-crimson);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition:
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 200ms ease;
+}
+
+.navbar__link:hover::after {
+  transform: scaleX(1);
+}
+
+.navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.navbar__cart-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.65rem 1.15rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--brand-crimson);
+  color: var(--ink-inverse);
+  font-weight: 700;
+  font-size: 0.9rem;
+  white-space: nowrap;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease,
+    transform 180ms ease;
+}
+
+.navbar__cart-btn:hover {
+  background-color: var(--brand-crimson-hover);
+  transform: translateY(-1px);
+}
+
+.navbar__cart-badge {
+  background-color: rgba(255, 255, 255, 0.2);
+  padding: 0.15rem 0.55rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  white-space: nowrap;
+  transition:
+    background-color 220ms ease,
+    color 220ms ease;
+}
+
+.navbar__burger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  color: var(--ink-primary);
+  border: 1px solid var(--border-strong);
+  transition:
+    color 200ms ease,
+    border-color 200ms ease;
+}
+
+/* Estado Scrolled: Rojo oficial #D82731 + Logo horizontal reducido en blanco + Textos blancos */
+.navbar--scrolled {
+  background-color: var(--brand-crimson);
+  border-bottom-color: transparent;
+  box-shadow: var(--shadow-sticky);
+}
+
+.navbar--scrolled .navbar__inner {
+  min-height: 68px;
+}
+
+.navbar--scrolled .navbar__logo {
+  height: 31px;
+}
+
+.navbar--scrolled .navbar__link {
+  color: var(--ink-inverse);
+}
+
+.navbar--scrolled .navbar__link::after {
+  background-color: var(--ink-inverse);
+}
+
+.navbar--scrolled .navbar__cart-btn {
+  background-color: var(--ink-inverse);
+  color: var(--brand-crimson);
+}
+
+.navbar--scrolled .navbar__cart-btn:hover {
+  background-color: var(--pastel-yellow);
+}
+
+.navbar--scrolled .navbar__cart-badge {
+  background-color: var(--pastel-coral);
+  color: var(--brand-crimson);
+}
+
+.navbar--scrolled .navbar__burger {
+  color: var(--ink-inverse);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.navbar__mobile-menu {
+  display: none;
+}
+
+@media (max-width: 820px) {
+  .navbar__inner {
+    min-height: 76px;
+    gap: 0.75rem;
+  }
+
+  .navbar__brand {
+    padding-right: 0.5rem;
+  }
+
+  .navbar__logo {
+    height: 32px;
+  }
+
+  .navbar--scrolled .navbar__logo {
+    height: 27px;
+  }
+
+  .navbar__nav {
+    display: none;
+  }
+
+  .navbar__burger {
+    display: inline-flex;
+  }
+
+  .navbar__cart-btn {
+    padding: 0.5rem 0.85rem;
+    gap: 0.45rem;
+  }
+
+  .navbar__cart-label {
+    display: none;
+  }
+
+  .navbar__mobile-menu {
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 1.25rem 1.25rem;
+    gap: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .navbar__mobile-link {
+    padding: 0.65rem 0.5rem;
+    font-weight: 600;
+    font-size: 1rem;
+    color: inherit;
+  }
+
+  .navbar--scrolled .navbar__mobile-menu {
+    color: var(--ink-inverse);
+  }
+}

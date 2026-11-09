@@ -1,0 +1,220 @@
+.cart-drawer-root {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+}
+
+.cart-drawer-root--open {
+  pointer-events: auto;
+}
+
+.cart-drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(26, 23, 21, 0.44);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 260ms ease;
+}
+
+.cart-drawer-root--open .cart-drawer__backdrop {
+  opacity: 1;
+}
+
+.cart-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(420px, 100vw);
+  background-color: var(--surface-page);
+  box-shadow: var(--shadow-drawer);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 300ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.cart-drawer-root--open .cart-drawer {
+  transform: translateX(0);
+}
+
+.cart-drawer__header {
+  padding: 1.35rem 1.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.cart-drawer__title-group {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.cart-drawer__title {
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--ink-primary);
+}
+
+.cart-drawer__count {
+  background-color: var(--pastel-coral);
+  color: var(--brand-crimson);
+  padding: 0.25rem 0.7rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.82rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.cart-drawer__close {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink-primary);
+  transition: background-color 160ms ease;
+}
+
+.cart-drawer__close:hover {
+  background-color: var(--surface-muted);
+}
+
+.cart-drawer__notice {
+  background-color: var(--pastel-yellow);
+  color: #3a3122;
+  padding: 0.65rem 1.5rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.cart-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0.5rem 1.5rem;
+}
+
+.cart-drawer__list {
+  list-style: none;
+}
+
+.cart-drawer__empty {
+  height: 100%;
+  min-height: 240px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 0.65rem;
+  padding: 2rem 1rem;
+}
+
+.cart-drawer__empty-icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 20px;
+  background-color: var(--pastel-yellow);
+  color: var(--brand-crimson);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.25rem;
+}
+
+.cart-drawer__empty-title {
+  font-size: 1.35rem;
+  color: var(--ink-primary);
+}
+
+.cart-drawer__empty-text {
+  font-size: 0.9rem;
+  color: var(--ink-secondary);
+  max-width: 28ch;
+}
+
+.cart-drawer__footer {
+  padding: 1.25rem 1.5rem 1.5rem;
+  background-color: var(--surface-card);
+  border-top: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.cart-drawer__summary {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.cart-drawer__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.92rem;
+  color: var(--ink-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+.cart-drawer__row strong {
+  color: var(--ink-primary);
+}
+
+.cart-drawer__deposit {
+  margin-top: 0.2rem;
+  font-size: 0.8rem;
+  color: var(--ink-secondary);
+}
+
+.cart-drawer__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.cart-drawer__quote-btn {
+  width: 100%;
+  padding: 0.95rem 1.5rem;
+  border-radius: var(--radius-pill);
+  background-color: var(--brand-crimson);
+  color: var(--ink-inverse);
+  font-weight: 700;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  transition:
+    background-color 180ms ease,
+    transform 160ms ease;
+}
+
+.cart-drawer__quote-btn:hover:not(:disabled) {
+  background-color: var(--brand-crimson-hover);
+  transform: translateY(-1px);
+}
+
+.cart-drawer__quote-btn--disabled {
+  background-color: var(--surface-muted);
+  color: var(--ink-secondary);
+  cursor: not-allowed;
+}
+
+.cart-drawer__clear-btn {
+  width: 100%;
+  padding: 0.45rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--ink-secondary);
+  transition: color 160ms ease;
+}
+
+.cart-drawer__clear-btn:hover {
+  color: var(--brand-crimson);
+}

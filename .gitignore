@@ -1,0 +1,51 @@
+# =============================================================================
+# 1. Dependencias y paquetes (NUNCA subir a GitHub - se instalan con npm install)
+# =============================================================================
+node_modules/
+.pnp
+.pnp.js
+
+# =============================================================================
+# 2. Compilación / Build de producción y cachés de TypeScript / Vite
+# =============================================================================
+dist/
+dist-ssr/
+*.local
+*.tsbuildinfo
+.vite/
+coverage/
+
+# =============================================================================
+# 3. Variables de entorno y secretos (claves privadas, tokens)
+# =============================================================================
+.env
+.env.*
+!.env.example
+
+# =============================================================================
+# 4. Archivos de sistema operativo y editores (Windows / macOS / VSCode)
+# =============================================================================
+Thumbs.db
+Desktop.ini
+.DS_Store
+.vscode/*
+!.vscode/extensions.json
+.idea/
+
+# =============================================================================
+# 5. Logs de depuración
+# =============================================================================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# =============================================================================
+# 6. Archivos pesados de producción / diseño externo (si estuvieran dentro)
+# =============================================================================
+*.stl
+*.STL
+*.psd
+*.ai
+*.xlsx
