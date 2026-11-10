@@ -9,6 +9,7 @@ const SAMPLE_ITEMS: CartItem[] = [
   {
     product: {
       id: 'maceta-pensador-zen',
+      code: '3DM-001',
       name: 'Maceta Pensador Zen',
       category: 'macetas',
       price: 4800,
@@ -20,6 +21,7 @@ const SAMPLE_ITEMS: CartItem[] = [
   {
     product: {
       id: 'maceta-calada-art-deco',
+      code: '3DM-002',
       name: 'Maceta Calada Art Déco',
       category: 'macetas',
       price: 5200,
@@ -33,8 +35,8 @@ const SAMPLE_ITEMS: CartItem[] = [
 describe('whatsappQuote.service', () => {
   it('incluye todos los productos seleccionados, cantidades y condiciones mayoristas', () => {
     const text = buildWhatsappQuoteText(SAMPLE_ITEMS);
-    expect(text).toContain('Maceta Pensador Zen — 20 u.');
-    expect(text).toContain('Maceta Calada Art Déco — 10 u.');
+    expect(text).toContain('Maceta Pensador Zen (3DM-001) — 20 u.');
+    expect(text).toContain('Maceta Calada Art Déco (3DM-002) — 10 u.');
     expect(text).toContain('Total de piezas: 30 unidades');
     expect(text).toContain('50% de seña');
   });

@@ -7,29 +7,44 @@ export function buildWhatsappQuoteText(items: CartItem[]): string {
     return '¡Hola 3 Monos! Quiero consultar por un pedido mayorista del catálogo.';
   }
 
+  const showPrices = BRAND_CONFIG.wholesale.showPrices;
   const totalUnits = items.reduce((sum, item) => sum + item.quantity, 0);
   const referenceSubtotal = items.reduce(
     (sum, item) => sum + item.product.price * item.quantity,
     0,
   );
 
-  const lines = items.map(
-    (item, idx) =>
-      `${idx + 1}. ${item.product.name} — ${item.quantity} u. (ref. ${formatCurrency(
+  const lines = items.map((item, idx) => {
+    if (showPrices) {
+      return `${idx + 1}. ${item.product.name} (${item.product.code}) — ${item.quantity} u. (ref. ${formatCurrency(
         item.product.price,
-      )} c/u)`,
-  );
+      )} c/u)`;
+    }
+    return `${idx + 1}. ${item.product.name} (${item.product.code}) — ${item.quantity} u.`;
+  });
 
-  return [
+  const messageParts = [
     '¡Hola 3 Monos! Quiero cotizar este pedido mayorista:',
     '',
     ...lines,
     '',
     `Total de piezas: ${totalUnits} unidades`,
-    `Referencia minorista: ${formatCurrency(referenceSubtotal)} (aplicar descuento mayorista)`,
+  ];
+
+  if (showPrices) {
+    messageParts.push(
+      `Referencia minorista: ${formatCurrency(referenceSubtotal)} (aplicar descuento mayorista)`,
+    );
+  }
+
+  messageParts.push(
     `Condición: ${BRAND_CONFIG.wholesale.depositPercent}% de seña (${BRAND_CONFIG.wholesale.paymentMethods})`,
-    '¿Me confirmás colores, medidas y demora?',
-  ].join('\n');
+    showPrices
+      ? '¿Me confirmás colores, medidas y demora?'
+      : '¿Me confirmás cotización mayorista, colores, medidas y demora?',
+  );
+
+  return messageParts.join('\n');
 }
 
 export function buildWhatsappQuoteUrl(items: CartItem[]): string {

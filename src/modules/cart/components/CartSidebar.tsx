@@ -13,9 +13,12 @@ export function CartSidebar() {
     isOpen,
     totalUnits,
     referenceSubtotal,
+    canQuote,
+    remainingForMin,
     closeCart,
-    addTen,
-    removeTen,
+    addUnit,
+    removeUnit,
+    setProductQuantity,
     removeItem,
     clearCart,
   } = useCart();
@@ -37,6 +40,7 @@ export function CartSidebar() {
   }, [isOpen]);
 
   const quoteUrl = buildWhatsappQuoteUrl(items);
+  const showPrices = BRAND_CONFIG.wholesale.showPrices;
 
   return (
     <div
@@ -69,8 +73,12 @@ export function CartSidebar() {
           </button>
         </header>
 
-        <div className="cart-drawer__notice">
-          Compra mín. {BRAND_CONFIG.wholesale.minOrderStep} u. · Descuento mayorista en WhatsApp
+        <div className={`cart-drawer__notice ${canQuote ? 'cart-drawer__notice--success' : ''}`}>
+          {items.length === 0
+            ? `Compra mín. ${BRAND_CONFIG.wholesale.minTotalUnits} u. surtidas · Descuento mayorista en WhatsApp`
+            : canQuote
+              ? `¡Mínimo alcanzado (${totalUnits} u.)! Ya podés solicitar tu cotización.`
+              : `Te faltan ${remainingForMin} ${remainingForMin === 1 ? 'unidad' : 'unidades'} para el mínimo mayorista (10 u. surtidas).`}
         </div>
 
         <div className="cart-drawer__body">
@@ -81,7 +89,7 @@ export function CartSidebar() {
               </div>
               <p className="cart-drawer__empty-title font-display">Tu pedido está vacío</p>
               <p className="cart-drawer__empty-text">
-                Tocá el botón + en cualquier producto para iniciar con 10 unidades y luego sumá de a 1 u.
+                Tocá el botón Agregar en cualquier producto para sumar piezas a tu pedido (mínimo 10 u. surtidas en total).
               </p>
             </div>
           ) : (
@@ -90,8 +98,9 @@ export function CartSidebar() {
                 <CartItemRow
                   key={item.product.id}
                   item={item}
-                  onAddTen={() => addTen(item.product)}
-                  onRemoveTen={() => removeTen(item.product.id)}
+                  onAdd={() => addUnit(item.product)}
+                  onRemove={() => removeUnit(item.product.id)}
+                  onChangeQty={(qty) => setProductQuantity(item.product, qty)}
                   onDelete={() => removeItem(item.product.id)}
                 />
               ))}
@@ -105,10 +114,12 @@ export function CartSidebar() {
               <span>Total piezas</span>
               <strong>{totalUnits} unidades</strong>
             </div>
-            <div className="cart-drawer__row">
-              <span>Ref. minorista</span>
-              <strong>{formatCurrency(referenceSubtotal)}</strong>
-            </div>
+            {showPrices && (
+              <div className="cart-drawer__row">
+                <span>Ref. minorista</span>
+                <strong>{formatCurrency(referenceSubtotal)}</strong>
+              </div>
+            )}
             <p className="cart-drawer__deposit">
               Seña para producir: {BRAND_CONFIG.wholesale.depositPercent}% ({BRAND_CONFIG.wholesale.paymentMethods})
             </p>
@@ -116,15 +127,27 @@ export function CartSidebar() {
 
           {items.length > 0 ? (
             <div className="cart-drawer__actions">
-              <a
-                href={quoteUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="cart-drawer__quote-btn"
-              >
-                <WhatsAppIcon width={20} height={20} />
-                <span>Cotizar</span>
-              </a>
+              {canQuote ? (
+                <a
+                  href={quoteUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="cart-drawer__quote-btn"
+                >
+                  <WhatsAppIcon width={20} height={20} />
+                  <span>Cotizar</span>
+                </a>
+              ) : (
+                <button
+                  type="button"
+                  className="cart-drawer__quote-btn cart-drawer__quote-btn--disabled"
+                  disabled
+                  title={`Agregá ${remainingForMin} u. más para alcanzar el mínimo`}
+                >
+                  <WhatsAppIcon width={20} height={20} />
+                  <span>Faltan {remainingForMin} u. para cotizar</span>
+                </button>
+              )}
 
               <button
                 type="button"

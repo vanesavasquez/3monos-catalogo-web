@@ -1,4 +1,4 @@
-import { Trash2 } from 'lucide-react';
+import { Trash2, Minus, Plus } from 'lucide-react';
 import { BRAND_CONFIG } from '@core/config/brand.config';
 import { UpcomingPlaceholder, formatCurrency } from '@shared/index';
 import { getCatalogImageUrl } from '@modules/catalog';
@@ -7,19 +7,27 @@ import './CartItemRow.css';
 
 interface CartItemRowProps {
   item: CartItem;
-  onAddTen: () => void;
-  onRemoveTen: () => void;
+  onAdd?: () => void;
+  onRemove?: () => void;
+  onChangeQty?: (quantity: number) => void;
   onDelete: () => void;
+  onAddTen?: () => void;
+  onRemoveTen?: () => void;
 }
 
 export function CartItemRow({
   item,
+  onAdd,
+  onRemove,
+  onChangeQty,
+  onDelete,
   onAddTen,
   onRemoveTen,
-  onDelete,
 }: CartItemRowProps) {
   const imageUrl = getCatalogImageUrl(item.product.imageFile);
-  const isAtMinUnits = item.quantity <= BRAND_CONFIG.wholesale.minOrderStep;
+  const showPrices = BRAND_CONFIG.wholesale.showPrices;
+  const handleAdd = onAdd ?? onAddTen ?? (() => {});
+  const handleRemove = onRemove ?? onRemoveTen ?? (() => {});
 
   return (
     <li className="cart-item">
@@ -42,39 +50,50 @@ export function CartItemRow({
             className="cart-item__delete"
             onClick={onDelete}
             aria-label={`Quitar ${item.product.name} del pedido`}
+            title="Quitar del pedido"
           >
             <Trash2 size={16} />
           </button>
         </div>
 
-        <span className="cart-item__unit-price">
-          {formatCurrency(item.product.price)} c/u · mín. {BRAND_CONFIG.wholesale.minOrderStep} u.
+        <span className="cart-item__meta">
+          {showPrices && `${formatCurrency(item.product.price)} c/u · `}
+          Código: {item.product.code}
         </span>
 
         <div className="cart-item__controls">
           <button
             type="button"
             className="cart-item__step-btn"
-            onClick={onRemoveTen}
-            disabled={isAtMinUnits}
+            onClick={handleRemove}
             aria-label={`Restar 1 unidad de ${item.product.name}`}
-            title={
-              isAtMinUnits
-                ? `Mínimo ${BRAND_CONFIG.wholesale.minOrderStep} unidades por producto`
-                : 'Restar 1 unidad'
-            }
+            title="Restar 1 unidad"
           >
-            -1
+            <Minus size={14} strokeWidth={2.5} />
           </button>
-          <span className="cart-item__qty">{item.quantity} u.</span>
+
+          <input
+            type="number"
+            min="0"
+            className="cart-item__input"
+            value={item.quantity}
+            onChange={(e) => {
+              const val = parseInt(e.target.value, 10);
+              if (onChangeQty) {
+                onChangeQty(isNaN(val) ? 0 : val);
+              }
+            }}
+            aria-label={`Cantidad de ${item.product.name}`}
+          />
+
           <button
             type="button"
             className="cart-item__step-btn"
-            onClick={onAddTen}
+            onClick={handleAdd}
             aria-label={`Sumar 1 unidad de ${item.product.name}`}
             title="Sumar 1 unidad"
           >
-            +1
+            <Plus size={14} strokeWidth={2.5} />
           </button>
         </div>
       </div>

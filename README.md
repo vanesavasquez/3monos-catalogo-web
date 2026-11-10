@@ -20,23 +20,30 @@ Brindar una experiencia moderna, ágil y visualmente atractiva alineada a la ide
 En lugar de procesar cobros automáticos en línea, el carrito actúa como un **configurador de pedidos mayoristas**:
 - Se accede en cualquier momento desde el botón flotante / cabecera **"Pedido (X u.)"**, abriendo un drawer lateral derecho.
 - Al presionar **"Cotizar"**, el sistema genera un enlace directo a la API de WhatsApp (`https://wa.me/5492664214124`) con un mensaje estructurado y codificado que incluye:
-  - Detalle ítem por ítem con cantidad y precio unitario de referencia.
+  - Detalle ítem por ítem con código oficial y cantidad de piezas seleccionadas.
   - Total acumulado de piezas.
-  - Subtotal minorista de referencia (base sobre la cual se aplica el descuento mayorista en la charla).
-  - Condiciones comerciales fijadas: **50% de seña para producir** (transferencia o efectivo) y tiempos de entrega estimados (**5 a 6 días hábiles**).
-  - Consulta directa para definir colores y terminaciones disponibles.
+  - Ocultación limpia de importes monetarios cuando los precios están en actualización (`showPrices: false`).
+  - Condiciones comerciales fijadas: **50% de seña para producir** (transferencia o efectivo).
+  - Consulta directa para acordar precios mayoristas, colores y terminaciones disponibles según tamaño.
 
-### 2. Lógica Comercial de Cantidades (Mínimo de 10 unidades + compra flexible)
-Para respetar la política mayorista de fabricación sin limitar la personalización del cliente, se implementó una regla de cálculo especializada:
+### 2. Lógica Comercial de Cantidades (Mínimo global de 10 unidades surtidas)
+- **Mínimo mayorista global (10 u.):**  
+  El mínimo de 10 unidades aplica al **total acumulado del pedido**, permitiendo al comprador combinar libremente modelos de todo el catálogo (por ejemplo: 3 de una maceta, 4 de otra y 3 tutores = 10 unidades).
+- **Control dinámico por producto:**  
+  Cada tarjeta presenta inicialmente el botón **"Agregar"**. Al hacer clic, se agrega 1 unidad y el botón se transforma automáticamente en un selector de cantidad interactivo con botones `[-]`, campo numérico y `[+]`.
+- **Eliminación intuitiva:**  
+  Si un producto desciende a 0 unidades mediante el botón `[-]`, se remueve automáticamente del pedido. También puede eliminarse en cualquier momento desde el icono de papelera dentro del carrito.
+- **Validación para cotizar:**  
+  El botón "Cotizar" permanece deshabilitado hasta que el carrito alcanza al menos 10 unidades en total, indicando claramente cuántas unidades faltan para completar el pedido mayorista.
 
-* **Piso Mínimo Inicial (10 u.):**  
-  La primera vez que el cliente hace clic en el botón `+` de un producto (o cuando su cantidad actual es `0 u.`), se agregan automáticamente **10 unidades** al pedido. Esto garantiza que ningún modelo entre al carrito por debajo del lote mínimo de producción.
+### 3. Modal de Zoom de Imagen
+- Al hacer clic en la fotografía de cualquier producto del catálogo, se abre una vista ampliada en alta resolución (`ProductLightboxModal`) sobre su fondo pastel oficial.
+- La ventana modal incluye el código de producto, insignia de unidades en pedido, tecla rápida de cierre (`Escape` o clic exterior) y el control de cantidad para agregar o ajustar unidades sin salir de la vista previa.
 
-* **Ajuste Fino Posterior (de a 1 u.):**  
-  Una vez alcanzado el piso de 10 unidades, los controles de cantidad tanto en la tarjeta del catálogo como dentro del carrito cambian su paso a **+1 unidad** y **-1 unidad**. Esto le permite al comprador pedir cifras exactas como **11, 12, 15, 21 o 35 unidades** sin estar obligado a saltar de 10 en 10.
-
-* **Protección de Mínimo (Opción A - Tope fijo en 10 u.):**  
-  Al presionar `-1` dentro del carrito, la cantidad desciende hasta llegar a las **10 unidades mínimas**. En ese punto el botón `-1` se deshabilita para evitar que el producto quede en cantidades no permitidas. Si el cliente decide no comprar ese artículo, debe eliminarlo conscientemente mediante el botón de la **papelera** (`removeItem`).
+### 4. Sección "Cómo trabajamos"
+1. **Mínimo 10 u. surtidas:** Combiná modelos libremente de a 1 u. hasta sumar 10 u. o más en tu pedido mayorista.
+2. **Cotizamos según tamaño:** Cotizamos según el tamaño y ahí revisamos los colores disponibles.
+3. **50% de seña:** Transferencia o efectivo. El 50% restante contra entrega.
 
 ---
 

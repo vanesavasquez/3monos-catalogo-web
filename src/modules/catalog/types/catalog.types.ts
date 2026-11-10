@@ -4,6 +4,7 @@ export type CategoryFilterValue = 'todos' | ProductCategory;
 
 export interface Product {
   id: string;
+  code: string;
   name: string;
   category: ProductCategory;
   price: number;

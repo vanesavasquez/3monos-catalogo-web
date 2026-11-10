@@ -6,6 +6,7 @@ import { CartProvider, useCart } from '../context/CartContext';
 
 const PRODUCT_A: Product = {
   id: 'maceta-pensador-zen',
+  code: '3DM-001',
   name: 'Maceta Pensador Zen',
   category: 'macetas',
   price: 4800,
@@ -13,69 +14,78 @@ const PRODUCT_A: Product = {
   pastelHex: '#FDF0CF',
 };
 
+const PRODUCT_B: Product = {
+  id: 'maceta-calada-art-deco',
+  code: '3DM-002',
+  name: 'Maceta Calada Art Déco',
+  category: 'macetas',
+  price: 5200,
+  imageFile: '0d39315a5f6aa94c.jpg',
+  pastelHex: '#F7D4D6',
+};
+
 const wrapper = ({ children }: { children: ReactNode }) => (
   <CartProvider>{children}</CartProvider>
 );
 
-describe('CartContext (mínimo 10 u. inicial + incremento de a 1 u., Opción A)', () => {
+describe('CartContext (mínimo global de 10 u. surtidas y control unitario)', () => {
   beforeEach(() => {
     window.localStorage.clear();
   });
 
-  it('agrega 10 unidades el primer clic y luego suma de a 1 unidad', () => {
+  it('suma de a 1 unidad por producto y valida el mínimo mayorista global de 10 u.', () => {
     const { result } = renderHook(() => useCart(), { wrapper });
 
     act(() => {
-      result.current.addTen(PRODUCT_A);
+      result.current.addUnit(PRODUCT_A);
+    });
+    expect(result.current.totalUnits).toBe(1);
+    expect(result.current.canQuote).toBe(false);
+    expect(result.current.remainingForMin).toBe(9);
+
+    // Sumar 4 más de A y 5 de B = 10 unidades surtidas
+    act(() => {
+      for (let i = 0; i < 4; i++) result.current.addUnit(PRODUCT_A);
+      for (let i = 0; i < 5; i++) result.current.addUnit(PRODUCT_B);
     });
     expect(result.current.totalUnits).toBe(10);
-    expect(result.current.referenceSubtotal).toBe(48000);
-
-    act(() => {
-      result.current.addTen(PRODUCT_A);
-    });
-    expect(result.current.totalUnits).toBe(11);
-    expect(result.current.referenceSubtotal).toBe(52800);
-
-    act(() => {
-      result.current.addTen(PRODUCT_A);
-    });
-    expect(result.current.totalUnits).toBe(12);
-    expect(result.current.referenceSubtotal).toBe(57600);
+    expect(result.current.canQuote).toBe(true);
+    expect(result.current.remainingForMin).toBe(0);
   });
 
-  it('resta de a 1 unidad y mantiene el tope fijo en 10 unidades (Opción A)', () => {
+  it('resta de a 1 unidad y elimina el producto al llegar a 0 unidades', () => {
     const { result } = renderHook(() => useCart(), { wrapper });
 
     act(() => {
-      result.current.addTen(PRODUCT_A); // 10
-      result.current.addTen(PRODUCT_A); // 11
-      result.current.addTen(PRODUCT_A); // 12
+      result.current.addUnit(PRODUCT_A); // 1
+      result.current.addUnit(PRODUCT_A); // 2
     });
-    expect(result.current.totalUnits).toBe(12);
+    expect(result.current.totalUnits).toBe(2);
 
     act(() => {
-      result.current.removeTen(PRODUCT_A.id);
+      result.current.removeUnit(PRODUCT_A.id);
     });
-    expect(result.current.totalUnits).toBe(11);
+    expect(result.current.totalUnits).toBe(1);
 
+    // Al restar cuando tiene 1 u., llega a 0 y se elimina
     act(() => {
-      result.current.removeTen(PRODUCT_A.id);
-    });
-    expect(result.current.totalUnits).toBe(10);
-
-    // Intento bajar de 10 u.: se mantiene en el tope fijo de 10 u.
-    act(() => {
-      result.current.removeTen(PRODUCT_A.id);
-    });
-    expect(result.current.items).toHaveLength(1);
-    expect(result.current.totalUnits).toBe(10);
-
-    // Sólo se elimina con removeItem (papelera)
-    act(() => {
-      result.current.removeItem(PRODUCT_A.id);
+      result.current.removeUnit(PRODUCT_A.id);
     });
     expect(result.current.items).toHaveLength(0);
     expect(result.current.totalUnits).toBe(0);
+  });
+
+  it('permite actualizar cantidad arbitraria con setProductQuantity', () => {
+    const { result } = renderHook(() => useCart(), { wrapper });
+
+    act(() => {
+      result.current.setProductQuantity(PRODUCT_A, 7);
+    });
+    expect(result.current.totalUnits).toBe(7);
+
+    act(() => {
+      result.current.setProductQuantity(PRODUCT_A, 0);
+    });
+    expect(result.current.items).toHaveLength(0);
   });
 });

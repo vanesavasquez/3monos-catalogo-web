@@ -2,15 +2,17 @@ import { useMemo, useState } from 'react';
 import { useCart } from '@modules/cart';
 import { CATALOG_PRODUCTS, CATEGORY_OPTIONS } from '../data/products.data';
 import { useInfiniteCatalog } from '../hooks/useInfiniteCatalog';
-import type { CategoryFilterValue } from '../types/catalog.types';
+import type { CategoryFilterValue, Product } from '../types/catalog.types';
 import { CategoryFilterBar } from './CategoryFilterBar';
 import { EmptyCategoryState } from './EmptyCategoryState';
 import { ProductCard } from './ProductCard';
+import { ProductLightboxModal } from './ProductLightboxModal';
 import './CatalogSection.css';
 
 export function CatalogSection() {
   const [activeCategory, setActiveCategory] = useState<CategoryFilterValue>('todos');
-  const { items, addTen } = useCart();
+  const [selectedProductForZoom, setSelectedProductForZoom] = useState<Product | null>(null);
+  const { items, addUnit, removeUnit, setProductQuantity } = useCart();
 
   const filteredProducts = useMemo(() => {
     if (activeCategory === 'todos') {
@@ -55,7 +57,10 @@ export function CatalogSection() {
                   key={product.id}
                   product={product}
                   quantityInCart={quantityMap.get(product.id) ?? 0}
-                  onAddTen={addTen}
+                  onAddUnit={addUnit}
+                  onRemoveUnit={removeUnit}
+                  onSetQty={(prod, qty) => setProductQuantity(prod, qty)}
+                  onOpenZoom={(prod) => setSelectedProductForZoom(prod)}
                 />
               ))}
             </div>
@@ -74,6 +79,18 @@ export function CatalogSection() {
           </>
         )}
       </div>
+
+      <ProductLightboxModal
+        product={selectedProductForZoom}
+        quantityInCart={
+          selectedProductForZoom ? quantityMap.get(selectedProductForZoom.id) ?? 0 : 0
+        }
+        isOpen={Boolean(selectedProductForZoom)}
+        onClose={() => setSelectedProductForZoom(null)}
+        onAddUnit={addUnit}
+        onRemoveUnit={removeUnit}
+        onSetQty={(prod, qty) => setProductQuantity(prod, qty)}
+      />
     </section>
   );
 }

@@ -12,16 +12,21 @@ import type { Product } from '@modules/catalog';
 import type { CartItem } from '../types/cart.types';
 
 const STORAGE_KEY = '3monos_wholesale_cart_v1';
-const MIN_UNITS = BRAND_CONFIG.wholesale.minOrderStep;
-const UNIT_STEP = BRAND_CONFIG.wholesale.unitStepAfterMin;
+const MIN_TOTAL = BRAND_CONFIG.wholesale.minTotalUnits;
+const UNIT_STEP = BRAND_CONFIG.wholesale.unitStep;
 
 interface CartContextValue {
   items: CartItem[];
   isOpen: boolean;
   totalUnits: number;
   referenceSubtotal: number;
+  canQuote: boolean;
+  remainingForMin: number;
   openCart: () => void;
   closeCart: () => void;
+  addUnit: (product: Product) => void;
+  removeUnit: (productId: string) => void;
+  setProductQuantity: (product: Product, quantity: number) => void;
   addTen: (product: Product) => void;
   removeTen: (productId: string) => void;
   removeItem: (productId: string) => void;
@@ -56,7 +61,7 @@ export function CartProvider({ children }: { children: ReactNode }) {
   const openCart = useCallback(() => setIsOpen(true), []);
   const closeCart = useCallback(() => setIsOpen(false), []);
 
-  const addTen = useCallback((product: Product) => {
+  const addUnit = useCallback((product: Product) => {
     setItems((prev) => {
       const existing = prev.find((entry) => entry.product.id === product.id);
       if (existing) {
@@ -66,21 +71,36 @@ export function CartProvider({ children }: { children: ReactNode }) {
             : entry,
         );
       }
-      return [...prev, { product, quantity: MIN_UNITS }];
+      return [...prev, { product, quantity: 1 }];
     });
   }, []);
 
-  const removeTen = useCallback((productId: string) => {
+  const removeUnit = useCallback((productId: string) => {
     setItems((prev) =>
-      prev.map((entry) =>
-        entry.product.id === productId
-          ? {
-              ...entry,
-              quantity: Math.max(MIN_UNITS, entry.quantity - UNIT_STEP),
-            }
-          : entry,
-      ),
+      prev
+        .map((entry) =>
+          entry.product.id === productId
+            ? { ...entry, quantity: entry.quantity - UNIT_STEP }
+            : entry,
+        )
+        .filter((entry) => entry.quantity > 0),
     );
+  }, []);
+
+  const setProductQuantity = useCallback((product: Product, quantity: number) => {
+    const qty = Math.max(0, Math.floor(quantity));
+    setItems((prev) => {
+      if (qty <= 0) {
+        return prev.filter((entry) => entry.product.id !== product.id);
+      }
+      const existing = prev.find((entry) => entry.product.id === product.id);
+      if (existing) {
+        return prev.map((entry) =>
+          entry.product.id === product.id ? { ...entry, quantity: qty } : entry,
+        );
+      }
+      return [...prev, { product, quantity: qty }];
+    });
   }, []);
 
   const removeItem = useCallback((productId: string) => {
@@ -101,16 +121,24 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [items],
   );
 
+  const canQuote = totalUnits >= MIN_TOTAL;
+  const remainingForMin = Math.max(0, MIN_TOTAL - totalUnits);
+
   const value = useMemo<CartContextValue>(
     () => ({
       items,
       isOpen,
       totalUnits,
       referenceSubtotal,
+      canQuote,
+      remainingForMin,
       openCart,
       closeCart,
-      addTen,
-      removeTen,
+      addUnit,
+      removeUnit,
+      setProductQuantity,
+      addTen: addUnit,
+      removeTen: removeUnit,
       removeItem,
       clearCart,
     }),
@@ -119,10 +147,13 @@ export function CartProvider({ children }: { children: ReactNode }) {
       isOpen,
       totalUnits,
       referenceSubtotal,
+      canQuote,
+      remainingForMin,
       openCart,
       closeCart,
-      addTen,
-      removeTen,
+      addUnit,
+      removeUnit,
+      setProductQuantity,
       removeItem,
       clearCart,
     ],

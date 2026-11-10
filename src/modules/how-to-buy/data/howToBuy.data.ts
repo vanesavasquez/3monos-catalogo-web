@@ -9,15 +9,15 @@ export interface HowToBuyStep {
 export const HOW_TO_BUY_STEPS: HowToBuyStep[] = [
   {
     id: 'minimo-mayorista',
-    title: 'Mínimo 10 unidades',
-    description: 'Iniciás con 10 u. por modelo y luego sumás de a 1 u. Descuento mayorista al cotizar.',
+    title: 'Mínimo 10 u. surtidas',
+    description: 'Combiná modelos libremente de a 1 u. hasta sumar 10 u. o más en tu pedido mayorista.',
     pastelVar: 'var(--pastel-coral)',
     iconName: 'layers',
   },
   {
     id: 'produccion-medida',
-    title: 'A medida en 5–6 días',
-    description: 'Coordinamos colores y tamaños disponibles por WhatsApp.',
+    title: 'Cotizamos según tamaño',
+    description: 'Cotizamos según el tamaño y ahí revisamos los colores disponibles.',
     pastelVar: 'var(--pastel-cobalt)',
     iconName: 'sliders',
   },

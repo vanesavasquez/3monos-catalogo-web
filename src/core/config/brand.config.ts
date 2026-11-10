@@ -21,8 +21,10 @@ export const BRAND_CONFIG = {
     url: 'https://instagram.com/3monos.3d',
   },
   wholesale: {
+    minTotalUnits: 10,
     minOrderStep: 10,
-    unitStepAfterMin: 1,
+    unitStep: 1,
+    showPrices: false,
     depositPercent: 50,
     productionDays: '5 a 6 días',
     paymentMethods: 'Transferencia o efectivo',

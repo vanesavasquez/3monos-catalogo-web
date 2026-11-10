@@ -91,6 +91,12 @@
   padding: 0.65rem 1.5rem;
   font-size: 0.82rem;
   font-weight: 600;
+  transition: background-color 200ms ease, color 200ms ease;
+}
+
+.cart-drawer__notice--success {
+  background-color: var(--pastel-cobalt);
+  color: var(--brand-cobalt);
 }
 
 .cart-drawer__body {
