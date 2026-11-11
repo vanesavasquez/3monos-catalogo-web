@@ -328,13 +328,13 @@ const CURATED_PRODUCTS: Product[] = [
     pastelHex: '#F7D4D6',
   },
   {
-    id: 'maceta-pajarito-sonriente',
+    id: 'maceta-patito-sonriente',
     code: '3DM-036',
-    name: 'Maceta Pajarito Sonriente',
+    name: 'Maceta Patito Sonriente',
     category: 'macetas',
     price: 4700,
-    imageFile: 'aa8a0a54694c0611.jpg',
-    pastelHex: '#E4CCD5',
+    imageFile: 'maceta patito.jpg',
+    pastelHex: '#F7D4D6',
   },
   {
     id: 'maceta-cilindrica-zocalo',
