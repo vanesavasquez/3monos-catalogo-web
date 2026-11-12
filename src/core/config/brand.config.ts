@@ -18,7 +18,7 @@ export const BRAND_CONFIG = {
   },
   instagram: {
     handle: '@3monos.3d',
-    url: 'https://instagram.com/3monos.3d',
+    url: 'https://www.instagram.com/3d_monos/',
   },
   wholesale: {
     minTotalUnits: 10,
