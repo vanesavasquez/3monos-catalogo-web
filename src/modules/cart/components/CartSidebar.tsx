@@ -75,10 +75,8 @@ export function CartSidebar() {
 
         <div className={`cart-drawer__notice ${canQuote ? 'cart-drawer__notice--success' : ''}`}>
           {items.length === 0
-            ? `Compra mín. ${BRAND_CONFIG.wholesale.minTotalUnits} u. surtidas · Descuento mayorista en WhatsApp`
-            : canQuote
-              ? `¡Mínimo alcanzado (${totalUnits} u.)! Ya podés solicitar tu cotización.`
-              : `Te faltan ${remainingForMin} ${remainingForMin === 1 ? 'unidad' : 'unidades'} para el mínimo mayorista (10 u. surtidas).`}
+            ? `Mayorista mín. ${BRAND_CONFIG.wholesale.minTotalUnits} u. surtidas (excepto juegos) · Cotización en WhatsApp`
+            : `¡Pedido listo (${totalUnits} u.)! Ya podés solicitar tu cotización por WhatsApp.`}
         </div>
 
         <div className="cart-drawer__body">
@@ -89,7 +87,7 @@ export function CartSidebar() {
               </div>
               <p className="cart-drawer__empty-title font-display">Tu pedido está vacío</p>
               <p className="cart-drawer__empty-text">
-                Tocá el botón Agregar en cualquier producto para sumar piezas a tu pedido (mínimo 10 u. surtidas en total).
+                Tocá el botón Agregar en cualquier producto para sumar piezas a tu pedido.
               </p>
             </div>
           ) : (

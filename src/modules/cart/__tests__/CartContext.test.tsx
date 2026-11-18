@@ -28,20 +28,23 @@ const wrapper = ({ children }: { children: ReactNode }) => (
   <CartProvider>{children}</CartProvider>
 );
 
-describe('CartContext (mínimo global de 10 u. surtidas y control unitario)', () => {
+describe('CartContext (control unitario sin bloqueo de mínimo)', () => {
   beforeEach(() => {
     window.localStorage.clear();
   });
 
-  it('suma de a 1 unidad por producto y valida el mínimo mayorista global de 10 u.', () => {
+  it('suma de a 1 unidad por producto y permite cotizar desde 1 unidad', () => {
     const { result } = renderHook(() => useCart(), { wrapper });
+
+    expect(result.current.canQuote).toBe(false);
+    expect(result.current.remainingForMin).toBe(0);
 
     act(() => {
       result.current.addUnit(PRODUCT_A);
     });
     expect(result.current.totalUnits).toBe(1);
-    expect(result.current.canQuote).toBe(false);
-    expect(result.current.remainingForMin).toBe(9);
+    expect(result.current.canQuote).toBe(true);
+    expect(result.current.remainingForMin).toBe(0);
 
     // Sumar 4 más de A y 5 de B = 10 unidades surtidas
     act(() => {

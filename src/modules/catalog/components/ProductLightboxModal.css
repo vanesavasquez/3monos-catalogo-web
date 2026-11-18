@@ -112,6 +112,65 @@
   background-color: #ffffff;
 }
 
+.lightbox-card__nav-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.92);
+  color: var(--ink-primary);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 14px rgba(26, 23, 21, 0.16);
+  transition: transform 160ms ease, background-color 160ms ease;
+  z-index: 2;
+}
+
+.lightbox-card__nav-btn:hover {
+  transform: translateY(-50%) scale(1.08);
+  background-color: #ffffff;
+}
+
+.lightbox-card__nav-btn--prev {
+  left: 1rem;
+}
+
+.lightbox-card__nav-btn--next {
+  right: 1rem;
+}
+
+.lightbox-card__dots {
+  position: absolute;
+  bottom: 0.9rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.6rem;
+  border-radius: var(--radius-pill);
+  background-color: rgba(26, 23, 21, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 2;
+}
+
+.lightbox-card__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.55);
+  padding: 0;
+  transition: transform 150ms ease, background-color 150ms ease;
+}
+
+.lightbox-card__dot--active {
+  background-color: #ffffff;
+  transform: scale(1.25);
+}
+
 .lightbox-card__footer {
   padding: 1.15rem 1.45rem;
   background-color: var(--surface-card);

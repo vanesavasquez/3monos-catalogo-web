@@ -1,5 +1,5 @@
-import { useEffect } from 'react';
-import { X, Plus, Minus } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { X, Plus, Minus, ChevronLeft, ChevronRight } from 'lucide-react';
 import { UpcomingPlaceholder } from '@shared/index';
 import { getCatalogImageUrl } from '../data/imageLoader';
 import type { Product } from '../types/catalog.types';
@@ -24,14 +24,35 @@ export function ProductLightboxModal({
   onRemoveUnit,
   onSetQty,
 }: ProductLightboxModalProps) {
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+
+  const files = product?.imageFiles?.length
+    ? product.imageFiles
+    : product?.imageFile
+      ? [product.imageFile]
+      : [];
+  const imageUrls = files
+    .map((f) => getCatalogImageUrl(f))
+    .filter((u): u is string => Boolean(u));
+
+  useEffect(() => {
+    setCurrentImgIndex(0);
+  }, [product?.id, isOpen]);
+
   useEffect(() => {
     if (!isOpen) return;
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        onClose();
+      } else if (e.key === 'ArrowLeft' && imageUrls.length > 1) {
+        setCurrentImgIndex((prev) => (prev - 1 + imageUrls.length) % imageUrls.length);
+      } else if (e.key === 'ArrowRight' && imageUrls.length > 1) {
+        setCurrentImgIndex((prev) => (prev + 1) % imageUrls.length);
+      }
     };
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, imageUrls.length]);
 
   useEffect(() => {
     if (isOpen) {
@@ -46,7 +67,9 @@ export function ProductLightboxModal({
 
   if (!isOpen || !product) return null;
 
-  const imageUrl = getCatalogImageUrl(product.imageFile);
+  const safeIndex = imageUrls.length > 0 ? currentImgIndex % imageUrls.length : 0;
+  const imageUrl = imageUrls[safeIndex] ?? getCatalogImageUrl(product.imageFile);
+  const hasMultipleImages = imageUrls.length > 1;
 
   return (
     <div
@@ -69,6 +92,44 @@ export function ProductLightboxModal({
             />
           ) : (
             <UpcomingPlaceholder label="Próximamente" sublabel={product.name} />
+          )}
+
+          {hasMultipleImages && (
+            <>
+              <button
+                type="button"
+                className="lightbox-card__nav-btn lightbox-card__nav-btn--prev"
+                onClick={() =>
+                  setCurrentImgIndex((prev) => (prev - 1 + imageUrls.length) % imageUrls.length)
+                }
+                aria-label={`Foto anterior de ${product.name}`}
+                title="Foto anterior"
+              >
+                <ChevronLeft size={20} strokeWidth={2.4} />
+              </button>
+
+              <button
+                type="button"
+                className="lightbox-card__nav-btn lightbox-card__nav-btn--next"
+                onClick={() => setCurrentImgIndex((prev) => (prev + 1) % imageUrls.length)}
+                aria-label={`Siguiente foto de ${product.name}`}
+                title="Siguiente foto"
+              >
+                <ChevronRight size={20} strokeWidth={2.4} />
+              </button>
+
+              <div className="lightbox-card__dots">
+                {imageUrls.map((_, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    className={`lightbox-card__dot ${idx === safeIndex ? 'lightbox-card__dot--active' : ''}`}
+                    onClick={() => setCurrentImgIndex(idx)}
+                    aria-label={`Ver foto ${idx + 1} de ${imageUrls.length}`}
+                  />
+                ))}
+              </div>
+            </>
           )}
 
           <div className="lightbox-card__badges">
@@ -96,9 +157,15 @@ export function ProductLightboxModal({
         <div className="lightbox-card__footer">
           <div className="lightbox-card__info">
             <h3 className="lightbox-card__title font-display">{product.name}</h3>
-            <span className="lightbox-card__desc">
-              Mínimo mayorista: 10 u. surtidas en toda la web
-            </span>
+            {product.category === 'juegos' ? (
+              product.description && (
+                <span className="lightbox-card__desc">{product.description}</span>
+              )
+            ) : (
+              <span className="lightbox-card__desc">
+                Mínimo mayorista: 10 u. surtidas en toda la web
+              </span>
+            )}
           </div>
 
           <div className="lightbox-card__action">

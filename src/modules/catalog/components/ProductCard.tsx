@@ -1,4 +1,5 @@
-import { Plus, Minus, ZoomIn } from 'lucide-react';
+import { useState } from 'react';
+import { Plus, Minus, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react';
 import { UpcomingPlaceholder, formatCurrency } from '@shared/index';
 import { BRAND_CONFIG } from '@core/config/brand.config';
 import { getCatalogImageUrl } from '../data/imageLoader';
@@ -24,10 +25,31 @@ export function ProductCard({
   onOpenZoom,
   onAddTen,
 }: ProductCardProps) {
-  const imageUrl = getCatalogImageUrl(product.imageFile);
+  const files = product.imageFiles?.length
+    ? product.imageFiles
+    : product.imageFile
+      ? [product.imageFile]
+      : [];
+  const imageUrls = files
+    .map((f) => getCatalogImageUrl(f))
+    .filter((u): u is string => Boolean(u));
+  const [currentImgIndex, setCurrentImgIndex] = useState(0);
+  const safeIndex = imageUrls.length > 0 ? currentImgIndex % imageUrls.length : 0;
+  const imageUrl = imageUrls[safeIndex] ?? getCatalogImageUrl(product.imageFile);
+  const hasMultipleImages = imageUrls.length > 1;
   const showPrices = BRAND_CONFIG.wholesale.showPrices;
   const handleAdd = onAddUnit ?? onAddTen ?? (() => {});
   const handleRemove = onRemoveUnit ?? (() => {});
+
+  const handlePrevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImgIndex((prev) => (prev - 1 + imageUrls.length) % imageUrls.length);
+  };
+
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImgIndex((prev) => (prev + 1) % imageUrls.length);
+  };
 
   return (
     <article className="product-card">
@@ -60,6 +82,48 @@ export function ProductCard({
           <ZoomIn size={16} strokeWidth={2.4} />
         </div>
 
+        {hasMultipleImages && (
+          <>
+            <button
+              type="button"
+              className="product-card__nav-btn product-card__nav-btn--prev"
+              onClick={handlePrevImage}
+              onKeyDown={(e) => e.stopPropagation()}
+              aria-label={`Foto anterior de ${product.name}`}
+              title="Foto anterior"
+            >
+              <ChevronLeft size={16} strokeWidth={2.4} />
+            </button>
+
+            <button
+              type="button"
+              className="product-card__nav-btn product-card__nav-btn--next"
+              onClick={handleNextImage}
+              onKeyDown={(e) => e.stopPropagation()}
+              aria-label={`Siguiente foto de ${product.name}`}
+              title="Siguiente foto"
+            >
+              <ChevronRight size={16} strokeWidth={2.4} />
+            </button>
+
+            <div className="product-card__dots">
+              {imageUrls.map((_, idx) => (
+                <button
+                  key={idx}
+                  type="button"
+                  className={`product-card__dot ${idx === safeIndex ? 'product-card__dot--active' : ''}`}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setCurrentImgIndex(idx);
+                  }}
+                  onKeyDown={(e) => e.stopPropagation()}
+                  aria-label={`Ver foto ${idx + 1} de ${imageUrls.length}`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+
         {quantityInCart > 0 && (
           <span className="product-card__in-cart" aria-label={`${quantityInCart} unidades en pedido`}>
             {quantityInCart} u.
@@ -80,6 +144,11 @@ export function ProductCard({
               <span className="product-card__code-label">Código: {product.code}</span>
             )}
           </div>
+          {product.category === 'juegos' ? (
+            product.description && <p className="product-card__desc">{product.description}</p>
+          ) : (
+            <span className="product-card__min-text">Mín. mayorista: 10 u. surtidas</span>
+          )}
         </div>
 
         <div className="product-card__action">
