@@ -480,10 +480,54 @@ const CURATED_PRODUCTS: Product[] = [
     imageFile: 'tutor hondas.jpg',
     pastelHex: '#E4CCD5',
   },
+  {
+    id: 'juego-tetris-equilibrio',
+    code: '3DM-053',
+    name: 'Tetris de Equilibrio',
+    category: 'juegos',
+    price: 6500,
+    imageFile: 'tetris balance.jpg',
+    description: 'Para poner a prueba el pulso.',
+    pastelHex: '#FDF0CF',
+  },
+  {
+    id: 'juego-linea-de-4',
+    code: '3DM-054',
+    name: 'Línea de 4',
+    category: 'juegos',
+    price: 7500,
+    imageFile: 'Linea de 4.jpg',
+    description: 'Un clásico con un diseño renovado que separa sus fichas automáticamente.',
+    pastelHex: '#CED7ED',
+  },
+  {
+    id: 'juego-stack-equilibrio',
+    code: '3DM-055',
+    name: 'Stack Equilibrio',
+    category: 'juegos',
+    price: 6800,
+    imageFile: 'stack equilibrio_ 1.jpg',
+    imageFiles: ['stack equilibrio_ 1.jpg', 'stack equilibrio_ 2.jpg'],
+    pastelHex: '#F7D4D6',
+  },
+  {
+    id: 'juego-jenga-colores',
+    code: '3DM-056',
+    name: 'Jenga de Colores',
+    category: 'juegos',
+    price: 7200,
+    imageFile: 'jenga de colores.jpg',
+    imageFiles: ['jenga de colores.jpg', 'jenga de colores_2.jpg'],
+    description: 'Jugá el clásico de siempre o agregale dificultad usando el dado de colores.',
+    pastelHex: '#E4CCD5',
+  },
 ];
 
 const mappedFileNames = new Set(
-  CURATED_PRODUCTS.map((p) => p.imageFile?.toLowerCase()).filter(Boolean),
+  CURATED_PRODUCTS.flatMap((p) => [
+    p.imageFile?.toLowerCase(),
+    ...(p.imageFiles?.map((f) => f.toLowerCase()) ?? []),
+  ]).filter((f): f is string => Boolean(f)),
 );
 
 const autoDiscoveredProducts: Product[] = getAllLoadedCatalogFiles()

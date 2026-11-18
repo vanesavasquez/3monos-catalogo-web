@@ -6,7 +6,10 @@ describe('catalog imageLoader coverage', () => {
   it('incluye todas las imágenes presentes en catalogo img new sin omitir ninguna', () => {
     const loadedFiles = getAllLoadedCatalogFiles();
     const mappedFiles = new Set(
-      CATALOG_PRODUCTS.map((p) => p.imageFile?.toLowerCase()).filter(Boolean),
+      CATALOG_PRODUCTS.flatMap((p) => [
+        p.imageFile?.toLowerCase(),
+        ...(p.imageFiles?.map((f) => f.toLowerCase()) ?? []),
+      ]).filter((f): f is string => Boolean(f)),
     );
 
     expect(loadedFiles.length).toBeGreaterThanOrEqual(20);

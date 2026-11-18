@@ -12,7 +12,6 @@ import type { Product } from '@modules/catalog';
 import type { CartItem } from '../types/cart.types';
 
 const STORAGE_KEY = '3monos_wholesale_cart_v1';
-const MIN_TOTAL = BRAND_CONFIG.wholesale.minTotalUnits;
 const UNIT_STEP = BRAND_CONFIG.wholesale.unitStep;
 
 interface CartContextValue {
@@ -121,8 +120,8 @@ export function CartProvider({ children }: { children: ReactNode }) {
     [items],
   );
 
-  const canQuote = totalUnits >= MIN_TOTAL;
-  const remainingForMin = Math.max(0, MIN_TOTAL - totalUnits);
+  const canQuote = totalUnits > 0;
+  const remainingForMin = 0;
 
   const value = useMemo<CartContextValue>(
     () => ({

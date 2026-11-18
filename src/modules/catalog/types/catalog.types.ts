@@ -9,6 +9,8 @@ export interface Product {
   category: ProductCategory;
   price: number;
   imageFile?: string;
+  imageFiles?: string[];
+  description?: string;
   pastelHex: string;
   isUpcoming?: boolean;
 }
