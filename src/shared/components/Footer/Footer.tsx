@@ -35,7 +35,7 @@ export function Footer() {
               className="footer__contact-btn footer__contact-btn--primary"
             >
               <WhatsAppIcon width={20} height={20} />
-              <span>WhatsApp Business</span>
+              <span>WhatsApp</span>
             </a>
 
             <a
